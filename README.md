@@ -177,12 +177,10 @@ button.addEventListener("mouseleave", () => {
 button.addEventListener("click", () => {
   window.scrollTo(0, 0);
 });
-
-
 ```
 
+## Day 04: Back Easing
 
-## Day 04: Back Easing 
 ```js
 import gsap from "gsap";
 
@@ -215,9 +213,11 @@ tabs.forEach((tab) => {
 
 updateIndicator(document.querySelector(".tab.active")); //This is setting the indicator to the first element at every refresh.
 ```
+
 ### Tab Indicator Animation - Implementation Notes
 
 #### Overview
+
 This code creates an animated sliding indicator that moves beneath tabs when clicked, using GSAP for smooth animations.
 
 ---
@@ -225,11 +225,13 @@ This code creates an animated sliding indicator that moves beneath tabs when cli
 #### Code Structure & Explanation
 
 ##### 1. Element Selection
+
 ```javascript
 const tabs = document.querySelectorAll(".tab");
 const tabRow = document.querySelector(".tab-row");
 const indicator = document.querySelector(".indicator");
 ```
+
 - **tabs**: All clickable tab elements
 - **tabRow**: Container holding all tabs (needed for calculating relative positions)
 - **indicator**: The visual element that slides under the active tab
@@ -247,21 +249,24 @@ const updateIndicator = (target) => {
 ```
 
 **Key Concept - `getBoundingClientRect()`**:
+
 - Returns the size and position of an element relative to the **viewport**
 - Both `tabBounds` and `rowBounds` are viewport-relative coordinates
 
 **Why we need BOTH measurements**:
+
 - `tabBounds.left` - where the clicked tab is positioned from the left edge of viewport
 - `rowBounds.left` - where the tab container starts from the left edge of viewport
 - `offset = tabBounds.left - rowBounds.left` - calculates the tab's position **within** the container
 
 **The Animation**:
+
 ```javascript
 gsap.to(indicator, {
-  x: offset,           // Move indicator horizontally
-  width: width,        // Match the tab's width
-  duration: 0.4,       // Animation speed
-  ease: "back.out(1.7)" // Bouncy easing effect
+  x: offset, // Move indicator horizontally
+  width: width, // Match the tab's width
+  duration: 0.4, // Animation speed
+  ease: "back.out(1.7)", // Bouncy easing effect
 });
 ```
 
@@ -280,6 +285,7 @@ tabs.forEach((tab) => {
 ```
 
 **Process**:
+
 1. Remove `active` class from all tabs (cleanup)
 2. Add `active` class to clicked tab
 3. Animate indicator to new position
@@ -299,12 +305,14 @@ updateIndicator(document.querySelector(".tab.active"));
 ### Implementation Steps (Checklist)
 
 #### HTML Setup
+
 - [ ] Create container with class `tab-row`
 - [ ] Add multiple elements with class `tab`
 - [ ] Add one element with class `indicator` (the sliding underline)
 - [ ] Mark one tab with `active` class for initial state
 
 #### CSS Requirements
+
 - [ ] Style `.tab-row` with `position: relative`
 - [ ] Style `.indicator` with:
   - `position: absolute`
@@ -314,6 +322,7 @@ updateIndicator(document.querySelector(".tab.active"));
 - [ ] Style `.tab.active` for visual feedback
 
 #### JavaScript Setup
+
 - [ ] Import GSAP library
 - [ ] Copy the code with correct class names matching your HTML
 - [ ] Ensure GSAP is loaded before script runs
@@ -332,12 +341,14 @@ updateIndicator(document.querySelector(".tab.active"));
 ### Why This Approach Works
 
 **Position Calculation Logic**:
+
 - Browser gives us viewport coordinates (getBoundingClientRect)
 - We need container-relative coordinates for animation
 - Subtracting container position from tab position = relative offset
 - This works regardless of where the tab-row is on the page
 
 **Animation Benefits**:
+
 - GSAP handles smooth interpolation between positions
 - Width animation creates satisfying "stretch" effect
 - Back easing adds playful bounce
@@ -351,3 +362,151 @@ updateIndicator(document.querySelector(".tab.active"));
 - Add touch/swipe gestures for mobile
 - Store active tab in localStorage
 - Handle dynamically added/removed tabs
+
+---
+
+## Day-05: Elastic easing
+
+```js
+gsap.to(bar, {
+  scaleY: 1,
+  duration: 3,
+  ease: "elastic.out(1, 1.25)", //This set the elastic property to the bar
+  delay: i * 0.1,
+});
+```
+
+---
+
+## Expo Easing<
+
+Expo easing in GSAP creates dramatic animations that start or end extremely fast or slow, mimicking exponential acceleration or deceleration.
+
+It's perfect for effects that need a powerful burst or sharp, smooth finish.
+
+The `expo.in` variant begins slowly and speeds up rapidly, ideal for building tension. `expo.out` starts with a burst of speed and slows dramatically, perfect for clean, techy finishes. `expo.inOut` combines both, delivering an intense, cinematic feel.
+
+````js
+// Polar to Cartesian conversion
+      const x = Math.cos(angle) * radius;
+      const y = -Math.sin(angle) * radius;
+
+      // 🔜 Animation will go here
+      gsap.to(child, {
+        x: x,
+        y: y,
+        opacity: 1,
+        duration: 0.5,
+        rotate: 360,
+        ease: "expo.in",
+      });
+    });
+  } else {
+    children.forEach((child) => {
+      // 🔜 Collapse animation will go here
+      gsap.to(child, {
+        x: 0,
+        y: 0,
+        opacity: 0,
+        duration: 0.3,
+        ease: "expo.in",
+        rotate: 0,
+        scale: 0.8,
+        pointerEvents: "none",
+      });
+    });
+
+    ```
+````
+
+## Day: Learn GsapTo
+
+The gsap.to() method is used to animate elements from their current state to a new state.
+
+The gsap.to() method is similar to the gsap.from() method, but the difference is that the gsap.to() method animates elements from their current state to a new state, while the gsap.from() method animates elements from a new state to their current state.
+
+```js
+import gsap from "gsap";
+
+const showToastLoop = () => {
+  gsap.to(".toast", {
+    opacity: 1,
+    y: -110,
+    duration: 0.8,
+    ease: "power4.out",
+    scale: 1,
+    onComplete: () => {
+      gsap.to(".toast", {
+        y: 100,
+        delay: 2,
+        duration: 0.7,
+        ease: "power4.in",
+        scale: 0.9,
+        onComplete: () => {
+          setTimeout(showToastLoop(), 2500);
+        },
+      });
+    },
+  });
+};
+
+showToastLoop();
+```
+
+## Day: Learn GsapFrom
+
+The gsap.from() method is used to animate elements from a new state to their current state.
+
+The gsap.from() method is similar to the gsap.to() method, but the difference is that the gsap.from() method animates elements from a new state to their current state, while the gsap.to() method animates elements from their current state to a new state.
+
+```js
+import gsap from "gsap";
+
+const btn = document.querySelector(".repeat");
+
+const animation = gsap.from(".card", {
+  y: 60,
+  opacity: 0,
+  duration: 0.8,
+  delay: 0.6,
+  scale: 0.9,
+  ease: "power4.out",
+  stagger: 0.2,
+});
+
+btn.addEventListener("click", () => {
+  animation.restart();
+});
+```
+
+---
+
+## Day Learn GsapFrom
+
+The gsap.fromTo() method is used to animate elements from a new state to a new state.
+
+The gsap.fromTo() method is similar to the gsap.from() and gsap.to() methods, but the difference is that the gsap.fromTo() method animates elements from a new state to a new state, while the gsap.from() method animates elements from a new state to their current state, and the gsap.to() method animates elements from their current state to a new state.
+
+```js
+import gsap from "gsap";
+
+const bars = document.querySelectorAll(".bar");
+
+bars.forEach((bar, i) => {
+  gsap.fromTo(
+    bar,
+    {
+      scaleY: 0.4,
+    },
+
+    {
+      scaleY: 1.6,
+      duration: 0.6,
+      ease: "sine.inOut",
+      repeat: -1,
+      yoyo: true,
+      delay: i * 0.1,
+    }
+  );
+});
+```
